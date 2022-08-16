@@ -11,12 +11,9 @@
 
 struct _No {
     char nome[31];
-    // Date aniversario;
-    // char email[41];
-    // char telefone[16];
+    int altura;
     struct _No *esquerda;
     struct _No *direita;
-    int altura;
 };
 
 typedef struct _No No;
@@ -39,17 +36,13 @@ int alturaArvore(No *tamanho) {
 
 
 
-No *novoNo(char nomeContato) {
-    No *no;
-    no = (No*)malloc(sizeof(No));
-    
+No *novoNo(char nomeContato[31]) {
+    No *no = (No*)malloc(sizeof(No));
+
     strcpy(no->nome, nomeContato); // O erro que tava dando do valor modificavel, é porque na struct a gente ta usando char e pra modificar precisa usar strcpy
-    // no->aniversario = aniversarioContato;
-    // no->email = emailContanto;
-    // no->telefone = telefoneContato;
+    no->altura = 1;
     no->esquerda = NULL;
     no->direita = NULL;
-    no->altura = 1;
 
     return (no);
 }
@@ -67,7 +60,7 @@ No *rotacaoDireita(No *y) {
     return x;
 }
 
-No *rotacaoEsquerda(No *x) { //Tava dando erro porque estava como rotação direita.
+No *rotacaoEsquerda(No *x) { 
     No *y = x->direita;
     No *aux = y->esquerda;
 
@@ -88,7 +81,7 @@ int verificaBalanceamento(No *altura) {
     return alturaArvore(altura->esquerda) - alturaArvore(altura->direita);
 }
 
-No *inserirNo(No *no, char nomeContato) {
+No *inserirNo(No *no, char nomeContato[31]) {
     if(no == NULL) {
         return (novoNo(nomeContato));
     }
@@ -135,7 +128,7 @@ No *menorNo(No *no) {
     return aux;
 }
 
-No *apagaNo(No *no, char nomeContato) {
+No *apagaNo(No *no, char nomeContato[31]) {
     if (no == NULL) {
         return no;
     }
@@ -171,7 +164,6 @@ No *apagaNo(No *no, char nomeContato) {
         return no;
     }
 
-/* --------------- */
     no->altura = 1 + max(alturaArvore(no->esquerda), alturaArvore(no->direita));
 
     int balancemento = verificaBalanceamento(no);
@@ -199,7 +191,7 @@ No *apagaNo(No *no, char nomeContato) {
 
 void printPreOrder(No *no) {
     if (no != NULL) {
-        //printf("%c ", no->nome);
+        printf("%s\n", no->nome);
         printPreOrder(no->esquerda);
         printPreOrder(no->direita);
     }
@@ -208,7 +200,7 @@ void printPreOrder(No *no) {
 void printInOrder(No *no) {
     if (no != NULL) {
         printPreOrder(no->esquerda);
-        //printf("%c ", no->nome);
+        printf("%s\n", no->nome);
         printPreOrder(no->direita);
     }
 }
@@ -217,44 +209,63 @@ void printPosOrder(No *no) {
     if (no != NULL) {
         printPreOrder(no->esquerda);
         printPreOrder(no->direita);
-        //printf("%c ", no->nome);
+        printf("%s\n", no->nome);
     }
 }
 
+void menuSistema() {
+    printf("--------------------------\n");
+    printf("0 -> Sair da Agenda\n");
+    printf("--------------------------\n");
+    printf("1 -> Inserir Contato\n");
+    printf("--------------------------\n");
+    printf("2 -> Deletar Contato\n");
+    printf("--------------------------\n");
+    printf("3 -> Atualizar Contato\n");
+    printf("--------------------------\n");
+    printf("4 -> Buscar Contato\n");
+    printf("--------------------------\n");
+    printf("5 -> Salvar Contato\n");
+    printf("--------------------------\n");
+}
+
+
 int main() {
-    No *no;
-    no = NULL;
+    No *no = NULL;
 
-    char nomeContato;
-    int tamanho;
+    char nomeContato[30];
+    int opt;
 
-    scanf("%d", &tamanho);
+    menuSistema();
 
-    for(int i=0; i<tamanho; i++) {
-        scanf("%c", &nomeContato);
+
+    printf("Opção: ");
+    scanf("%d", &opt);
+    printf("\n");
+//    __fpurge(stdin);
+
+    // root = deleteNode(root, 3);
+    for(int i=0; i<10; i++) {
+        printf("Digite o Nome: ");
+        scanf("%s", &nomeContato);
+        printf("\n");
         no = inserirNo(no, nomeContato);
     }
-    printf("\n");
-
-    // printPreOrder(root);
-    // root = deleteNode(root, 3);
-
-    // printf("\nAfter deletion: ");
     
-    printf("PRE ORDER: \n");
-    printPreOrder(no);
-    printf("\n");
-    printf("\n");
+    // printf("PRE ORDER: \n");
+    // printPreOrder(no);
+    // printf("\n");
+    // printf("\n");
 
     printf("IN ORDER: \n");
     printInOrder(no);
     printf("\n");
-    printf("\n");
+    // printf("\n");
 
-    printf("POS ORDER: \n");
-    printPosOrder(no);
-    printf("\n");
-    printf("\n");
+    // printf("POS ORDER: \n");
+    // printPosOrder(no);
+    // printf("\n");
+    // printf("\n");
 
   return 0;
 }
