@@ -40,11 +40,10 @@ int alturaArvore(No *tamanho) {
 
 
 No *novoNo(char nomeContato) {
-    // No *no = (no *)
-    //     malloc(sizeof(No));
-    No *no = malloc(sizeof(No));
+    No *no;
+    no = (No*)malloc(sizeof(No));
     
-    no->nome = nomeContato;
+    strcpy(no->nome, nomeContato); // O erro que tava dando do valor modificavel, é porque na struct a gente ta usando char e pra modificar precisa usar strcpy
     // no->aniversario = aniversarioContato;
     // no->email = emailContanto;
     // no->telefone = telefoneContato;
@@ -68,7 +67,7 @@ No *rotacaoDireita(No *y) {
     return x;
 }
 
-No *rotacaoDireita(No *x) {
+No *rotacaoEsquerda(No *x) { //Tava dando erro porque estava como rotação direita.
     No *y = x->direita;
     No *aux = y->esquerda;
 
@@ -161,9 +160,8 @@ No *apagaNo(No *no, char nomeContato) {
 
       }else {
           No *aux = menorNo(no->direita);
-          
-          // strcpy() MUDAR
-          no->nome = aux->nome;
+
+          strcpy(no->nome, aux->nome); //tava dando erro, coloquei strcpy
 
           no->esquerda = apagaNo(no->direita, aux->nome);
       }
@@ -201,7 +199,7 @@ No *apagaNo(No *no, char nomeContato) {
 
 void printPreOrder(No *no) {
     if (no != NULL) {
-        printf("%c ", no->nome);
+        //printf("%c ", no->nome);
         printPreOrder(no->esquerda);
         printPreOrder(no->direita);
     }
@@ -210,7 +208,7 @@ void printPreOrder(No *no) {
 void printInOrder(No *no) {
     if (no != NULL) {
         printPreOrder(no->esquerda);
-        printf("%c ", no->nome);
+        //printf("%c ", no->nome);
         printPreOrder(no->direita);
     }
 }
@@ -219,16 +217,16 @@ void printPosOrder(No *no) {
     if (no != NULL) {
         printPreOrder(no->esquerda);
         printPreOrder(no->direita);
-        printf("%c ", no->nome);
+        //printf("%c ", no->nome);
     }
 }
 
 int main() {
-    No *no = NULL;
+    No *no;
+    no = NULL;
 
+    char nomeContato;
     int tamanho;
-
-    char nomeContato[31];
 
     scanf("%d", &tamanho);
 
