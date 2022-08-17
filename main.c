@@ -168,7 +168,7 @@ No *apagaNo(No *no, char nomeContato[31]) {
       }
     }
 
-    if (no == NULL) {
+    if(no == NULL) {
         return no;
     }
 
@@ -371,7 +371,8 @@ void menuMostrar() {
 int main() {
     No *no = NULL;
 
-    char nomeContato[30];
+    char nomeContato[31];
+    char nomeAntigoContato[31];
     Data nascimentoContato;
     char emailContato[41];
     char telefoneContato[16];
@@ -497,9 +498,10 @@ int main() {
                 // lerArquivo(no);
                 printf("Atualiza Conatato!\n");
                 printf("Digite o Contato que deseja Atualizar: ");
-                scanf("%s", &nomeContato);
+                scanf("%s", &nomeAntigoContato);
                 printf("\n");
-                apagaNo(no, nomeContato);
+
+                no = apagaNo(no, nomeAntigoContato);
 
                 printf("Digite o Nome: ");
                 scanf("%s", &nomeContato);
@@ -517,7 +519,10 @@ int main() {
                 scanf("%s", &telefoneContato);
                 printf("\n");
                 // -------------------
+                
                 no = inserirNo(no, nomeContato, nascimentoContato, emailContato, telefoneContato);
+
+                // no = AtualizarNo(no, nomeAntigoContato, nomeContato, nascimentoContato, emailContato, telefoneContato);
 
                 break;
 
