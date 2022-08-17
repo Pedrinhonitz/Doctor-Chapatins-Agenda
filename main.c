@@ -3,14 +3,17 @@
 #include <string.h>
 #include <math.h>
 
-// struct _Date {
-//     int dia;
-//     int mes;
-//     int ano;
-// }typedef Date;
+struct _Data {
+    int dia;
+    int mes;
+    int ano;
+}typedef Data;
 
 struct _No {
     char nome[31];
+    Data nascimento;
+    char email[41];
+    char telefone[16];
     int altura;
     struct _No *esquerda;
     struct _No *direita;
@@ -36,10 +39,15 @@ int alturaArvore(No *tamanho) {
 
 
 
-No *novoNo(char nomeContato[31]) {
+No *novoNo(char nomeContato[31], Data nascimentoContato, char emailContanto[41], char telefoneContato[16]) {
     No *no = (No*)malloc(sizeof(No));
 
-    strcpy(no->nome, nomeContato); // O erro que tava dando do valor modificavel, é porque na struct a gente ta usando char e pra modificar precisa usar strcpy
+    strcpy(no->nome, nomeContato); 
+    no->nascimento.dia = nascimentoContato.dia;
+    no->nascimento.mes = nascimentoContato.mes;
+    no->nascimento.ano = nascimentoContato.ano;
+    strcpy(no->email, emailContanto);
+    strcpy(no->telefone, telefoneContato);
     no->altura = 1;
     no->esquerda = NULL;
     no->direita = NULL;
@@ -81,15 +89,15 @@ int verificaBalanceamento(No *altura) {
     return alturaArvore(altura->esquerda) - alturaArvore(altura->direita);
 }
 
-No *inserirNo(No *no, char nomeContato[31]) {
+No *inserirNo(No *no, char nomeContato[31], Data nascimentoContato, char emailContanto[41], char telefoneContato[16]) {
     if(no == NULL) {
-        return (novoNo(nomeContato));
+        return (novoNo(nomeContato, nascimentoContato, emailContanto, telefoneContato));
     }
 
     if((strcmp(nomeContato, no->nome)) < 0) {
-        no->esquerda = inserirNo(no->esquerda, nomeContato);
+        no->esquerda = inserirNo(no->esquerda, nomeContato, nascimentoContato, emailContanto, telefoneContato);
     }else if((strcmp(nomeContato, no->nome)) > 0) {
-        no->direita = inserirNo(no->direita, nomeContato);
+        no->direita = inserirNo(no->direita, nomeContato, nascimentoContato, emailContanto, telefoneContato);
     }else {
       return no;
     }
@@ -154,7 +162,7 @@ No *apagaNo(No *no, char nomeContato[31]) {
       }else {
           No *aux = menorNo(no->direita);
 
-          strcpy(no->nome, aux->nome); //tava dando erro, coloquei strcpy
+          strcpy(no->nome, aux->nome); 
 
           no->esquerda = apagaNo(no->direita, aux->nome);
       }
@@ -190,26 +198,38 @@ No *apagaNo(No *no, char nomeContato[31]) {
 }
 
 void printPreOrder(No *no) {
-    if (no != NULL) {
+    if(no != NULL) {
         printf("%s\n", no->nome);
+        printf("%d/%d/%d\n", no->nascimento.dia, no->nascimento.mes, no->nascimento.ano);
+        printf("%s\n", no->email);
+        printf("%s\n", no->telefone);
+        printf("--------------------------\n");
         printPreOrder(no->esquerda);
         printPreOrder(no->direita);
     }
 }
 
 void printInOrder(No *no) {
-    if (no != NULL) {
-        printPreOrder(no->esquerda);
+    if(no != NULL) {
+        printInOrder(no->esquerda);
         printf("%s\n", no->nome);
-        printPreOrder(no->direita);
+        printf("%d/%d/%d\n", no->nascimento.dia, no->nascimento.mes, no->nascimento.ano);
+        printf("%s\n", no->email);
+        printf("%s\n", no->telefone);
+        printf("--------------------------\n");
+        printInOrder(no->direita);
     }
 }
 
 void printPosOrder(No *no) {
-    if (no != NULL) {
-        printPreOrder(no->esquerda);
-        printPreOrder(no->direita);
+    if(no != NULL) {
+        printPosOrder(no->esquerda);
+        printPosOrder(no->direita);
         printf("%s\n", no->nome);
+        printf("%d/%d/%d\n", no->nascimento.dia, no->nascimento.mes, no->nascimento.ano);
+        printf("%s\n", no->email);
+        printf("%s\n", no->telefone);
+        printf("--------------------------\n");
     }
 }
 
@@ -217,55 +237,127 @@ void menuSistema() {
     printf("--------------------------\n");
     printf("0 -> Sair da Agenda\n");
     printf("--------------------------\n");
-    printf("1 -> Inserir Contato\n");
+    printf("1 -> Inserir Contatos\n");
     printf("--------------------------\n");
-    printf("2 -> Deletar Contato\n");
+    printf("2 -> Deletar Contatos\n");
     printf("--------------------------\n");
-    printf("3 -> Atualizar Contato\n");
+    printf("3 -> Mostrar Contatos\n");
     printf("--------------------------\n");
-    printf("4 -> Buscar Contato\n");
+    printf("4 -> Buscar Contatos\n");
     printf("--------------------------\n");
-    printf("5 -> Salvar Contato\n");
+    printf("5 -> Atualizar Contatos\n");
+    printf("--------------------------\n");
+    printf("6 -> Salvar Contatos\n");
     printf("--------------------------\n");
 }
 
+void menuMostrar() {
+    printf("--------------------------\n");
+    printf("0 -> Voltar ao Menu\n");
+    printf("--------------------------\n");
+    printf("1 -> Mostrar Pre Order\n");
+    printf("--------------------------\n");
+    printf("2 -> Mostrar In Order\n");
+    printf("--------------------------\n");
+    printf("3 -> Mostrar Pos Order\n");
+    printf("--------------------------\n");
+}
 
 int main() {
     No *no = NULL;
 
     char nomeContato[30];
-    int opt;
+    Data nascimentoContato;
+    char emailContato[41];
+    char telefoneContato[16];
 
-    menuSistema();
-
-
-    printf("Opção: ");
-    scanf("%d", &opt);
-    printf("\n");
-//    __fpurge(stdin);
-
-    // root = deleteNode(root, 3);
-    for(int i=0; i<10; i++) {
-        printf("Digite o Nome: ");
-        scanf("%s", &nomeContato);
-        printf("\n");
-        no = inserirNo(no, nomeContato);
-    }
+    int opt, optMostrar;
+    int flag = 1;
+    int flagMostrar = 1;
     
-    // printf("PRE ORDER: \n");
-    // printPreOrder(no);
-    // printf("\n");
-    // printf("\n");
+    while(flag) {
 
-    printf("IN ORDER: \n");
-    printInOrder(no);
-    printf("\n");
-    // printf("\n");
+        menuSistema();
 
-    // printf("POS ORDER: \n");
-    // printPosOrder(no);
-    // printf("\n");
-    // printf("\n");
+        printf("Opção: ");
+        scanf("%d", &opt);
+        printf("\n");
 
-  return 0;
+        switch(opt) {
+
+            case 0:
+                printf("Saiu da Agenda!\n");
+                
+                flag = 0;
+                break;
+            
+            case 1:
+                printf("Inserir Contato\n");
+                
+                printf("Digite o Nome: ");
+                scanf("%s", &nomeContato);
+                printf("\n");
+                // -------------------
+                printf("Digite a Data de Nascimento: ");
+                scanf("%d/%d/%d", &nascimentoContato.dia, &nascimentoContato.mes, &nascimentoContato.ano);
+                printf("\n");
+                //-------------------------
+                printf("Digite o Email: ");
+                scanf("%s", &emailContato);
+                printf("\n");
+                // -------------------
+                printf("Digite o Telefone: ");
+                scanf("%s", &telefoneContato);
+                printf("\n");
+                // -------------------
+                no = inserirNo(no, nomeContato, nascimentoContato, emailContato, telefoneContato);
+                break;
+            
+            case 2:
+                printf("Deletar Contato\n");
+                
+                printf("Digite o Nome: ");
+                scanf("%s", &nomeContato);
+                printf("\n");
+                
+                no = apagaNo(no, nomeContato);
+                break;
+
+            case 3:
+                while(flagMostrar) {
+                    menuMostrar();
+                    scanf("%d", &optMostrar);
+                    switch (optMostrar) {
+                    case 0:
+                        flagMostrar = 0;
+                        break;
+                    
+                    case 1:
+                        printf("Mostrar Pre Order!\n");
+                        printPreOrder(no);
+                        break;
+
+                    case 2:
+                        printf("Mostrar In Order!\n");
+                        printInOrder(no);
+                        break;
+
+                    case 3:
+                        printf("Mostrar Pos Order!\n");
+                        printPosOrder(no);
+                        break;
+
+                    default:
+                        printf("Comando Invalido!\n");
+                        break;
+                    }
+                }
+            
+            default:
+                printf("Comando Invalido!\n");
+                break;
+        }
+    }
+
+    return 0;
 }
