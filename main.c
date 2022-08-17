@@ -214,6 +214,47 @@ No *buscarNo(No *no, char nomeContato[31]){
     return NULL;
 }
 
+No *AtualizarNo(No *no, char nomeAntigoContato[31], char nomeContato[31], Data nascimento, char emailContato[41], char telefoneContanto[16]) {
+    int flag = 1;
+     if(strcmp(no->nome, nomeAntigoContato) > 0) {
+        no = no->direita;
+        while(flag) {
+            if(strcmp(no->nome, nomeAntigoContato) == 0) {
+                flag = 0;
+                strcpy(no->nome, nomeContato);
+                no->nascimento.dia = nascimento.dia;
+                no->nascimento.mes = nascimento.mes;
+                no->nascimento.ano = nascimento.ano;
+                strcpy(no->email, emailContato);
+                strcpy(no->telefone, telefoneContanto);
+                return no;
+            }else {
+                printf("Nome Não Encontrado!\n");
+            }
+        }
+    }else if(strcmp(no->nome, nomeAntigoContato) < 0) {
+        no = no->esquerda;
+        while(flag) {
+            if(strcmp(no->nome, nomeAntigoContato) == 0) {
+                flag = 0;
+                strcpy(no->nome, nomeContato);
+                no->nascimento.dia = nascimento.dia;
+                no->nascimento.mes = nascimento.mes;
+                no->nascimento.ano = nascimento.ano;
+                strcpy(no->email, emailContato);
+                strcpy(no->telefone, telefoneContanto);
+                return no;
+            }else {
+                printf("Nome Não Encontrado!\n");
+            }
+        }
+    }else {
+        printf("Nome Não Encontrado!\n");
+    }
+
+
+}
+
 
 void salvarArquivo(No *no) {
     FILE *arq = fopen("database.batman", "wb");
@@ -239,9 +280,8 @@ void lerArquivo(No *no) {
 
     if(arq) {
         fscanf(arq, "%d\n", &quantidade);
-        // printf("Quantidade: %d\n", quantidade);
-        fread(no, sizeof(No), quantidade, arq);
-        printf("\nNome: %s\nData: %d/%d/%d\n", no->nome, no->nascimento.dia, no->nascimento.mes, no->nascimento.ano);
+        fread(&no, sizeof(No), quantidade, arq);
+        // printf("\nNome: %s\nData: %d/%d/%d\n", no->nome, no->nascimento.dia, no->nascimento.mes, no->nascimento.ano);
         fclose(arq);
     }else {
         printf("Problemas para abrir o arquivo\n");
@@ -452,9 +492,33 @@ int main() {
 
             case 5:
                 system("clear");
-                printf("Ler Arquivo!\n");
+                // printf("Ler Arquivo!\n");
                 // ler();
-                lerArquivo(no);
+                // lerArquivo(no);
+                printf("Atualiza Conatato!\n");
+                printf("Digite o Contato que deseja Atualizar: ");
+                scanf("%s", &nomeContato);
+                printf("\n");
+                apagaNo(no, nomeContato);
+
+                printf("Digite o Nome: ");
+                scanf("%s", &nomeContato);
+                printf("\n");
+                // -------------------
+                printf("Digite a Data de Nascimento: ");
+                scanf("%d/%d/%d", &nascimentoContato.dia, &nascimentoContato.mes, &nascimentoContato.ano);
+                printf("\n");
+                //-------------------------
+                printf("Digite o Email: ");
+                scanf("%s", &emailContato);
+                printf("\n");
+                // -------------------
+                printf("Digite o Telefone: ");
+                scanf("%s", &telefoneContato);
+                printf("\n");
+                // -------------------
+                no = inserirNo(no, nomeContato, nascimentoContato, emailContato, telefoneContato);
+
                 break;
 
             case 6:
