@@ -223,7 +223,7 @@ void salvarArquivo(No *no) {
     if(arq) {
         fprintf(arq, "%d\n", quantidade);
         result = fwrite(no, sizeof(No), quantidade, arq);
-        printf("Numero de elementos gravados: %d\n", result);
+        printf("Numero de Baitchês gravados: %d\n", result);
         fclose(arq);
     }else {
         printf("Problemas para criar o arquivo\n");
@@ -233,18 +233,36 @@ void salvarArquivo(No *no) {
 
 // // Esse Caralho não ta funcionando ainda
 
-// void lerArquivo(No *no) {
-//     FILE *arq = fopen("database.batman", "rb");
-//     int quantidade;
+void lerArquivo(No *no) {
+    FILE *arq = fopen("database.batman", "rb");
+    int quantidade;
 
-//     if(arq) {
-//         fscanf(arq, "%d\n", &quantidade);
-//         fread(no, sizeof(No), quantidade, arq);
-//         fclose(arq);
-//     }else {
-//         printf("Problemas para criar o arquivo\n");
-//    	    return;
+    if(arq) {
+        fscanf(arq, "%d\n", &quantidade);
+        // printf("Quantidade: %d\n", quantidade);
+        fread(no, sizeof(No), quantidade, arq);
+        printf("\nNome: %s\nData: %d/%d/%d\n", no->nome, no->nascimento.dia, no->nascimento.mes, no->nascimento.ano);
+        fclose(arq);
+    }else {
+        printf("Problemas para abrir o arquivo\n");
+   	    return;
+    }
+}
+
+
+// void ler(){
+//     No *no;
+//     FILE *file = fopen("database.batman", "rb");
+
+//     if(file){
+//         while(!feof(file)){
+//             if(fread(&no, sizeof(No), 1, file))
+//                 printf("\nNome: %s\nData: %d/%d/%d\n", no->nome, no->nascimento.dia, no->nascimento.mes, no->nascimento.ano);
+//         }
+//         fclose(file);
 //     }
+//     else
+//         printf("\nErro ao abrir arquivo!\n");
 // }
 
 void printPreOrder(No *no) {
@@ -253,7 +271,6 @@ void printPreOrder(No *no) {
         printf("%d/%d/%d\n", no->nascimento.dia, no->nascimento.mes, no->nascimento.ano);
         printf("%s\n", no->email);
         printf("%s\n", no->telefone);
-        printf("--------------------------\n");
         printPreOrder(no->esquerda);
         printPreOrder(no->direita);
     }
@@ -266,7 +283,6 @@ void printInOrder(No *no) {
         printf("%d/%d/%d\n", no->nascimento.dia, no->nascimento.mes, no->nascimento.ano);
         printf("%s\n", no->email);
         printf("%s\n", no->telefone);
-        printf("--------------------------\n");
         printInOrder(no->direita);
     }
 }
@@ -279,7 +295,6 @@ void printPosOrder(No *no) {
         printf("%d/%d/%d\n", no->nascimento.dia, no->nascimento.mes, no->nascimento.ano);
         printf("%s\n", no->email);
         printf("%s\n", no->telefone);
-        printf("--------------------------\n");
     }
 }
 
@@ -295,7 +310,7 @@ void menuSistema() {
     printf("--------------------------\n");
     printf("4 -> Buscar Contatos\n");
     printf("--------------------------\n");
-    printf("5 -> Atualizar Contatos\n");
+    printf("5 -> Alterar Contatos\n");
     printf("--------------------------\n");
     printf("6 -> Salvar Contatos\n");
     printf("--------------------------\n");
@@ -338,12 +353,14 @@ int main() {
         switch(opt) {
 
             case 0:
+                system("clear");
                 printf("Saiu da Agenda!\n");
                 
                 flag = 0;
                 break;
             
             case 1:
+                system("clear");
                 printf("Inserir Contato\n");
                 
                 printf("Digite o Nome: ");
@@ -366,6 +383,7 @@ int main() {
                 break;
             
             case 2:
+                system("clear");
                 printf("Deletar Contato\n");
                 
                 printf("Digite o Nome: ");
@@ -377,6 +395,7 @@ int main() {
 
             case 3:
                 flagMostrar = 1;
+                system("clear");
                 while(flagMostrar) {
                     menuMostrar();
                     scanf("%d", &optMostrar);
@@ -386,27 +405,32 @@ int main() {
                         break;
                     
                     case 1:
+                        system("clear");
                         printf("Mostrar Pre Order!\n");
                         printPreOrder(no);
                         break;
 
                     case 2:
+                        system("clear");
                         printf("Mostrar In Order!\n");
                         printInOrder(no);
                         break;
 
                     case 3:
+                        system("clear");
                         printf("Mostrar Pos Order!\n");
                         printPosOrder(no);
                         break;
 
                     default:
+                        system("clear");
                         printf("Comando Invalido!\n");
                         break;
                     }
                 }
                 break;
             case 4:
+                system("clear");
                 printf("Digite o nome da pessoa: ");
                 scanf("%s", &nomeContato);
                 No *resultadoBusca = buscarNo(no, nomeContato);
@@ -426,7 +450,15 @@ int main() {
                 //-------------------------
                 break;
 
+            case 5:
+                system("clear");
+                printf("Ler Arquivo!\n");
+                // ler();
+                lerArquivo(no);
+                break;
+
             case 6:
+                system("clear");
                 printf("Salvar Arquivo!\n");
                 salvarArquivo(no);
                 break;
