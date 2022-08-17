@@ -197,6 +197,23 @@ No *apagaNo(No *no, char nomeContato[31]) {
     return no;
 }
 
+No *buscarNo(No *no, char nomeContato[31]){
+    while (no)
+    {
+        if (strcmp(nomeContato, no->nome) > 0)
+        {
+            no = no->direita;
+        }
+        else if (strcmp(nomeContato, no->nome) < 0)
+        {
+            no = no->esquerda;
+        }else{
+            return no;
+        }
+    }
+    return NULL;
+}
+
 void printPreOrder(No *no) {
     if(no != NULL) {
         printf("%s\n", no->nome);
@@ -324,6 +341,7 @@ int main() {
                 break;
 
             case 3:
+                flagMostrar = 1; // Adicionei porque quando sai a flag fica como 0, dai nunca volta pra um e cai pro default
                 while(flagMostrar) {
                     menuMostrar();
                     scanf("%d", &optMostrar);
@@ -352,7 +370,26 @@ int main() {
                         break;
                     }
                 }
-            
+            case 4:
+                printf("Digite o nome da pessoa: ");
+                scanf("%s", &nomeContato);
+                No *resultadoBusca = buscarNo(no, nomeContato);
+                //-------------------------
+                printf("\nResultado da busca");
+                printf("\n");
+                //-------------------------
+                if (resultadoBusca)
+                {
+                    printf("Nome: %s\n", resultadoBusca->nome);
+                    printf("Idade: %d/%d/%d\n", resultadoBusca->nascimento.dia, resultadoBusca->nascimento.mes, resultadoBusca->nascimento.ano);
+                    printf("E-mail: %s\n", resultadoBusca->email);
+                    printf("Telefone: %s\n", resultadoBusca->telefone);
+                }else
+                    printf("!!Nenhum nome encontrado!!\n");
+                    printf("\n");
+                //-------------------------
+                break;
+
             default:
                 printf("Comando Invalido!\n");
                 break;
