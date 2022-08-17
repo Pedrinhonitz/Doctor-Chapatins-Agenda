@@ -214,6 +214,39 @@ No *buscarNo(No *no, char nomeContato[31]){
     return NULL;
 }
 
+
+void salvarArquivo(No *no) {
+    FILE *arq = fopen("database.batman", "wb");
+    int result;
+    int quantidade;
+
+    if(arq) {
+        fprintf(arq, "%d\n", quantidade);
+        result = fwrite(no, sizeof(No), quantidade, arq);
+        printf("Numero de elementos gravados: %d\n", result);
+        fclose(arq);
+    }else {
+        printf("Problemas para criar o arquivo\n");
+   	    return;
+    }
+}
+
+// // Esse Caralho não ta funcionando ainda
+
+// void lerArquivo(No *no) {
+//     FILE *arq = fopen("database.batman", "rb");
+//     int quantidade;
+
+//     if(arq) {
+//         fscanf(arq, "%d\n", &quantidade);
+//         fread(no, sizeof(No), quantidade, arq);
+//         fclose(arq);
+//     }else {
+//         printf("Problemas para criar o arquivo\n");
+//    	    return;
+//     }
+// }
+
 void printPreOrder(No *no) {
     if(no != NULL) {
         printf("%s\n", no->nome);
@@ -292,6 +325,8 @@ int main() {
     int flag = 1;
     int flagMostrar = 1;
     
+    // lerArquivo(no);
+
     while(flag) {
 
         menuSistema();
@@ -341,7 +376,7 @@ int main() {
                 break;
 
             case 3:
-                flagMostrar = 1; // Adicionei porque quando sai a flag fica como 0, dai nunca volta pra um e cai pro default
+                flagMostrar = 1;
                 while(flagMostrar) {
                     menuMostrar();
                     scanf("%d", &optMostrar);
@@ -370,6 +405,7 @@ int main() {
                         break;
                     }
                 }
+                break;
             case 4:
                 printf("Digite o nome da pessoa: ");
                 scanf("%s", &nomeContato);
@@ -388,6 +424,11 @@ int main() {
                     printf("!!Nenhum nome encontrado!!\n");
                     printf("\n");
                 //-------------------------
+                break;
+
+            case 6:
+                printf("Salvar Arquivo!\n");
+                salvarArquivo(no);
                 break;
 
             default:
