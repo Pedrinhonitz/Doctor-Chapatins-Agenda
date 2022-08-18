@@ -256,8 +256,49 @@ No *AtualizarNo(No *no, char nomeAntigoContato[31], char nomeContato[31], Data n
 }
 
 
+// void criaArquivo(FILE *arquivo) {
+//     arquivo = fopen("database.txt", "r");
+
+//     if(arquivo != NULL) {
+//         return;
+//     }else {
+//         arquivo = fopen("database.txt","a");
+//         fclose(arquivo);
+//     }
+
+// }
+
+// void escreverNoArquivo(FILE *arquivo, char nomeContato[31], Data nascimento, char emailContato[41], char telefone[16]) {
+//     arquivo = fopen("database.txt", "a");
+//     fprintf(arquivo, "%s %d/%d/%d %s %s", nomeContato, nascimento.dia, nascimento.mes, nascimento.ano, emailContato, telefone);
+//     // fwrite();
+//     fclose(arquivo);
+// }
+
+// void gravaNoArquivoEstruturaDaArqvore(No *no, FILE* arquivo) { 
+//     if(no != NULL) {
+//         fprintf(arquivo,"%s %d/%d/%d %s %s",no->nome, no->nascimento.dia, no->nascimento.mes, no->nascimento.ano, no->email, no->telefone);
+//         gravaNoArquivoEstruturaDaArqvore(no->esquerda, arquivo);
+//         gravaNoArquivoEstruturaDaArqvore(no->direita, arquivo);
+//     }else{
+//         printf("Erro ao salvar estrutura!");
+//     }
+// }
+
+
+// void atualizaArquivo(No *no) { 
+//     FILE *arquivo;
+
+//     arquivo = fopen("database.txt", "w");
+//     gravaNoArquivoEstruturaDaArqvore(no, arquivo);
+//     fclose(arquivo);
+// }
+
+
+
+
 void salvarArquivo(No *no) {
-    FILE *arq = fopen("database.batman", "wb");
+    FILE *arq = fopen("database.txt", "wb");
     int result;
     int quantidade;
 
@@ -275,10 +316,13 @@ void salvarArquivo(No *no) {
 // // Esse Caralho não ta funcionando ainda
 
 void lerArquivo(No *no) {
-    FILE *arq = fopen("database.batman", "rb");
+    FILE *arq = fopen("database.txt", "rb");
+    
+    printf("A\n");
     int quantidade;
 
     if(arq) {
+        printf("B\n");
         fscanf(arq, "%d\n", &quantidade);
         fread(&no, sizeof(No), quantidade, arq);
         // printf("\nNome: %s\nData: %d/%d/%d\n", no->nome, no->nascimento.dia, no->nascimento.mes, no->nascimento.ano);
@@ -371,6 +415,9 @@ void menuMostrar() {
 int main() {
     No *no = NULL;
 
+    // FILE *arquivo;
+    // criaArquivo(arquivo);
+
     char nomeContato[31];
     char nomeAntigoContato[31];
     Data nascimentoContato;
@@ -394,14 +441,15 @@ int main() {
         switch(opt) {
 
             case 0:
-                system("clear");
+                // system("clear");
                 printf("Saiu da Agenda!\n");
                 
                 flag = 0;
+                // atualizaArquivo(no);
                 break;
             
             case 1:
-                system("clear");
+                // system("clear");
                 printf("Inserir Contato\n");
                 
                 printf("Digite o Nome: ");
@@ -421,10 +469,11 @@ int main() {
                 printf("\n");
                 // -------------------
                 no = inserirNo(no, nomeContato, nascimentoContato, emailContato, telefoneContato);
+                // escreverNoArquivo(arquivo, nomeContato, nascimentoContato,emailContato, telefoneContato);
                 break;
             
             case 2:
-                system("clear");
+                // system("clear");
                 printf("Deletar Contato\n");
                 
                 printf("Digite o Nome: ");
@@ -432,11 +481,12 @@ int main() {
                 printf("\n");
                 
                 no = apagaNo(no, nomeContato);
+                // atualizaArquivo(no);
                 break;
 
             case 3:
                 flagMostrar = 1;
-                system("clear");
+                // system("clear");
                 while(flagMostrar) {
                     menuMostrar();
                     scanf("%d", &optMostrar);
@@ -446,32 +496,32 @@ int main() {
                         break;
                     
                     case 1:
-                        system("clear");
+                        // system("clear");
                         printf("Mostrar Pre Order!\n");
                         printPreOrder(no);
                         break;
 
                     case 2:
-                        system("clear");
+                        // system("clear");
                         printf("Mostrar In Order!\n");
                         printInOrder(no);
                         break;
 
                     case 3:
-                        system("clear");
+                        // system("clear");
                         printf("Mostrar Pos Order!\n");
                         printPosOrder(no);
                         break;
 
                     default:
-                        system("clear");
+                        // system("clear");
                         printf("Comando Invalido!\n");
                         break;
                     }
                 }
                 break;
             case 4:
-                system("clear");
+                // system("clear");
                 printf("Digite o nome da pessoa: ");
                 scanf("%s", &nomeContato);
                 No *resultadoBusca = buscarNo(no, nomeContato);
@@ -492,7 +542,7 @@ int main() {
                 break;
 
             case 5:
-                system("clear");
+                // system("clear");
                 // printf("Ler Arquivo!\n");
                 // ler();
                 // lerArquivo(no);
@@ -527,9 +577,14 @@ int main() {
                 break;
 
             case 6:
-                system("clear");
+                // system("clear");
                 printf("Salvar Arquivo!\n");
                 salvarArquivo(no);
+                break;
+
+            case 7:
+                printf("Ler Arquivo!\n");
+                lerArquivo(no);
                 break;
 
             default:
